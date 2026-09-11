@@ -1,0 +1,64 @@
+<f:layout name="Default" />
+
+<f:section name="Main">
+
+    <section class="blog-search-section">
+        <div class="container">
+            <header class="blog-search-header">
+                <span class="blog-list-eyebrow">Find Your Next Read</span>
+                <h1 class="blog-list-title">Search the journal</h1>
+                <p class="blog-list-subtitle">
+                    Look through our latest stories, insights, and ideas.
+                </p>
+            </header>
+
+            <f:form action="search" method="post" class="blog-search-form">
+                <label class="blog-search-label" for="blog-search-input">Search articles</label>
+                <div class="blog-search-controls">
+                    <f:form.textfield id="blog-search-input" class="blog-search-input" name="search" value="{search}" placeholder="Try a topic or title..." />
+                    <f:form.submit class="blog-search-submit" value="Search" />
+                </div>
+            </f:form>
+
+            <f:if condition="{results}">
+                <div class="blog-search-results">
+                    <div class="blog-search-results-heading">
+                        <span>Search results</span>
+                        <span class="blog-count">{results -> f:count()} Articles</span>
+                    </div>
+
+                    <div class="blog-search-grid">
+                        <f:for each="{results}" as="blog" iteration="iterator">
+                            <article class="blog-search-card">
+                                <f:if condition="{blog.thumbnail}">
+                                    <f:image image="{blog.thumbnail}" class="blog-search-card-thumbnail" alt="{blog.title}" width="800c" height="360c" />
+                                </f:if>
+                                <span class="blog-search-card-number">{iterator.cycle}</span>
+                                <h2>
+                                    <f:link.action action="show" arguments="{blog: blog}">
+                                        {blog.title}
+                                    </f:link.action>
+                                </h2>
+                                <div class="blog-search-card-description">
+                                    {blog.description -> f:format.raw()}
+                                </div>
+                                <f:link.action action="show" arguments="{blog: blog}" class="blog-search-card-link">
+                                    Read article <span aria-hidden="true">→</span>
+                                </f:link.action>
+                            </article>
+                        </f:for>
+                    </div>
+                </div>
+            </f:if>
+
+            <f:if condition="{search} && !{results}">
+                <div class="blog-empty blog-search-empty">
+                    <div class="blog-empty-icon">✦</div>
+                    <h2>No matching articles</h2>
+                    <p>Try a different keyword or search for a broader topic.</p>
+                </div>
+            </f:if>
+        </div>
+    </section>
+
+</f:section>

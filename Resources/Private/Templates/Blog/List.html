@@ -1,0 +1,205 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:blog="http://typo3.org/ns/Nitsan/BlogSystem/ViewHelpers" data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+<f:section name="Main">
+
+    <section class="blog-list-section">
+        <div class="container">
+
+            <div class="blog-list-header">
+                <div>
+                    <span class="blog-list-eyebrow">Our Journal</span>
+                    <h1 class="blog-list-title">Latest from the blog</h1>
+                    <p class="blog-list-subtitle">
+                        Discover insights, stories, and ideas from our team.
+                    </p>
+                </div>
+
+                <f:link.action class="blog-search-submit" type="button" aria-label="Add blog" action="new">
+                    <span class="blog-submit-icon" aria-hidden="true">＋</span>
+                    <span>Add Blog</span>
+                </f:link.action>
+
+                <f:if condition="{blogs -> f:count()}">
+                    <span class="blog-count">
+                        {blogs -> f:count()} Articles
+                    </span>
+                </f:if>
+            </div>
+
+            <f:flashMessages />
+
+            <f:form action="list" controller="Blog" method="get" noCache="1" class="blog-filter-form">
+                <div class="blog-filter-field">
+                    <label for="blog-filter-category">Category</label>
+                    <f:form.select
+                        id="blog-filter-category"
+                        name="category"
+                        options="{categories}"
+                        optionValueField="uid"
+                        optionLabelField="name"
+                        prependOptionLabel="All categories"
+                        prependOptionValue="0"
+                        value="{selectedCategory}"
+                        class="blog-filter-select"
+                    />
+                </div>
+
+                <div class="blog-filter-field">
+                    <label for="blog-filter-sort">Sort by</label>
+                    <f:form.select id="blog-filter-sort" name="sortBy" value="{sortBy}" class="blog-filter-select">
+                        <f:form.select.option value="publishDate">Publish date</f:form.select.option>
+                        <f:form.select.option value="views">Views</f:form.select.option>
+                    </f:form.select>
+                </div>
+
+                <div class="blog-filter-field">
+                    <label for="blog-filter-direction">Order</label>
+                    <f:form.select id="blog-filter-direction" name="direction" value="{direction}" class="blog-filter-select">
+                        <f:form.select.option value="DESC">Descending</f:form.select.option>
+                        <f:form.select.option value="ASC">Ascending</f:form.select.option>
+                    </f:form.select>
+                </div>
+
+                <f:form.submit value="Apply filters" class="blog-filter-submit" />
+            </f:form>
+
+            <f:if condition="{blogs -> f:count()}">
+
+                <f:then>
+                    <div class="blog-grid">
+
+                        <f:for each="{blogs}" as="blog" iteration="iterator">
+
+                            <article class="blog-card js-blog-card" style="--card-index: {iterator.index};">
+
+                                <div class="blog-card-gradient"></div>
+
+                                <f:if condition="{blog.thumbnail}">
+                                    <f:image image="{blog.thumbnail}" class="blog-card-thumbnail" alt="{blog.title}"
+                                        width="800c" height="420c" />
+                                </f:if>
+
+                                <div class="blog-card-content">
+
+                                    <div class="blog-card-top">
+                                        <span class="blog-number">
+                                            {iterator.cycle}
+                                        </span>
+
+                                        <f:link.action action="show" arguments="{blog: blog}" class="blog-read">
+                                            Read article
+                                            <span class="blog-arrow" aria-hidden="true">→</span>
+                                        </f:link.action>
+                                    </div>
+
+                                    <h2 class="blog-card-title">
+                                        <f:link.action action="show" arguments="{blog: blog}">
+                                            {blog.title}
+                                        </f:link.action>
+                                    </h2>
+
+                                    <div class="blog-card-description">
+                                        {blog.description -> f:format.raw()}
+                                    </div>
+
+                                    <div class="blog-card-footer">
+
+                                        <div class="blog-author">
+                                            <span class="author-avatar">
+                                                {blog.author -> f:format.crop(maxCharacters: 1)}
+                                            </span>
+
+                                            <div class="author-info">
+                                                <span class="meta-label">Written by</span>
+                                                <span class="author-name">
+                                                    {blog.author}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="blog-views">
+                                            <span class="views-icon">◉</span>
+                                            <blog:readingTime content="{blog.description}" />
+                                            <span class="views-label">min read</span>
+                                        </div>
+
+                                        <div class="blog-views">
+                                            <span class="views-icon">◉</span>
+                                            <span>{blog.views}</span>
+                                            <span class="views-label">views</span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </article>
+
+                        </f:for>
+
+                    </div>
+
+                    <f:if condition="{paginator.numberOfPages} > 1">
+                        <nav class="blog-pagination" aria-label="Blog pagination">
+
+                            <f:if condition="{pagination.previousPageNumber}">
+                                <f:link.action action="list" arguments="{currentPage: pagination.previousPageNumber, category: selectedCategory, sortBy: sortBy, direction: direction}"
+                                    class="blog-pagination-link blog-pagination-prev">
+                                    ← Previous
+                                </f:link.action>
+                            </f:if>
+
+                            <div class="blog-pagination-pages">
+
+                                <f:for each="{pagination.allPageNumbers}" as="page">
+                                    <f:if condition="{page} == {paginator.currentPageNumber}">
+                                        <f:then>
+                                            <span class="blog-pagination-link active" aria-current="page">
+                                                {page}
+                                            </span>
+                                        </f:then>
+
+                                        <f:else>
+                                            <f:link.action action="list" arguments="{currentPage: page, category: selectedCategory, sortBy: sortBy, direction: direction}"
+                                                class="blog-pagination-link">
+                                                {page}
+                                            </f:link.action>
+                                        </f:else>
+                                    </f:if>
+                                </f:for>
+
+                            </div>
+
+                            <f:if condition="{pagination.nextPageNumber}">
+                                <f:link.action action="list" arguments="{currentPage: pagination.nextPageNumber, category: selectedCategory, sortBy: sortBy, direction: direction}"
+                                    class="blog-pagination-link blog-pagination-next">
+                                    Next →
+                                </f:link.action>
+                            </f:if>
+
+                        </nav>
+                    </f:if>
+
+
+                </f:then>
+
+                <f:else>
+                    <div class="blog-empty">
+                        <div class="blog-empty-icon">✦</div>
+                        <h2>No blogs found</h2>
+                        <p>
+                            There are no articles available right now.
+                            Please check back soon.
+                        </p>
+                    </div>
+                </f:else>
+
+            </f:if>
+
+        </div>
+    </section>
+
+</f:section>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<T3DataStructure>
+    <sheets>
+        <settings>
+            <ROOT>
+                <type>array</type>
+                <el>
+                
+                    <settings.limit>
+                        <label>Number of posts</label>
+                        <config>
+                            <type>input</type>
+                            <size>5</size>
+                            <default>10</default>
+                            <eval>int</eval>
+                        </config>
+                    </settings.limit>
+
+                    <settings.order>
+                        <label>Publish date sorting</label>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <items>
+                                <numIndex index="0">
+                                    <label>Newest first</label>
+                                    <value>DESC</value>
+                                </numIndex>
+                                <numIndex index="1">
+                                    <label>Oldest first</label>
+                                    <value>ASC</value>
+                                </numIndex>
+                            </items>
+                            <default>DESC</default>
+                        </config>
+                    </settings.order>
+
+                </el>
+            </ROOT>
+        </settings>
+    </sheets>
+</T3DataStructure>

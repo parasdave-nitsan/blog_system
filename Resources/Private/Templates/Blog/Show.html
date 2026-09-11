@@ -1,0 +1,181 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:blog="http://typo3.org/ns/Nitsan/BlogSystem/ViewHelpers" data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+<f:section name="Main">
+
+    <section class="blog-detail-section">
+        <div class="container">
+            <f:link.action action="list" class="blog-back-link">
+                <span aria-hidden="true">←</span>
+                Back to Blog List
+            </f:link.action>
+
+            <div class="blog-detail-actions">
+                <f:link.action action="delete" arguments="{blog: blog}" class="blog-delete-button"
+                    onclick="return confirm('Are you sure you want to delete this blog?');">
+                    Delete
+                </f:link.action>
+
+                <f:link.action action="edit" arguments="{blog: blog}" class="blog-edit-button">
+                    Edit Blog
+                </f:link.action>
+            </div>
+
+            <article class="blog-detail">
+                <header class="blog-detail-header">
+                    <span class="blog-list-eyebrow">From Our Journal</span>
+                    <h1 class="blog-detail-title">{blog.title}</h1>
+
+                    <div class="blog-detail-meta">
+                        <div class="blog-author">
+                            <span class="author-avatar">
+                                {blog.author -> f:format.crop(maxCharacters: 1)}
+                            </span>
+                            <div class="author-info">
+                                <span class="meta-label">Written by</span>
+                                <span class="author-name">{blog.author}</span>
+                            </div>
+                        </div>
+
+                        <blog:dateFormat date="{blog.publishDate}" format="d.m.Y H:i" />
+
+                        <f:if condition="{category}">
+                            <span class="blog-category">Category: {category.name}</span>
+                        </f:if>
+
+
+
+                        <span class="blog-views">
+                            <span class="views-icon">◉</span>
+                            <span>{blog.views}</span>
+                            <span class="views-label">views</span>
+                        </span>
+                    </div>
+                </header>
+
+                <f:if condition="{blog.thumbnail}">
+                    <f:image image="{blog.thumbnail}" class="blog-detail-thumbnail" alt="{blog.title}" width="1400c"
+                        height="700c" />
+                </f:if>
+
+                <div class="blog-detail-content">
+                    {blog.description -> f:format.raw()}
+                </div>
+
+                <section class="blog-comments" aria-labelledby="comments-heading">
+                    <div class="blog-comments-header">
+                        <div>
+                            <span class="blog-list-eyebrow">Join the conversation</span>
+                            <h2 id="comments-heading">Comments</h2>
+                        </div>
+                        <span class="blog-comments-count">{comments -> f:count()} comments</span>
+                    </div>
+
+                    <f:flashMessages />
+
+                    <f:form action="createComment" controller="Blog" method="post" class="blog-comment-form">
+                        <f:form.hidden name="blog" value="{blog.uid}" />
+                        <f:form.hidden name="parentComment" value="0" />
+                        <div class="blog-comment-form-grid">
+                            <f:form.textfield name="user" class="blog-form-input" placeholder="Your name" required="required" />
+                            <f:form.textarea name="content" class="blog-form-textarea" rows="4" placeholder="Share your thoughts..." required="required" />
+                        </div>
+                        <f:form.submit value="Post comment" class="blog-comment-submit" />
+                    </f:form>
+
+                    <div class="blog-comment-list">
+                        <f:for each="{comments}" as="comment">
+                            <article class="blog-comment">
+                                <div class="blog-comment-meta">
+                                    <strong>{comment.user}</strong>
+                                    <span><f:format.date date="{comment.publishDate}" format="d.m.Y H:i" /></span>
+                                </div>
+                                <p class="blog-comment-content">{comment.content}</p>
+                                <f:form action="updateComment" controller="Blog" objectName="comment" object="{comment}"
+                                    method="post" class="blog-comment-edit-form" hidden="hidden">
+                                    <f:form.hidden property="user" />
+                                    <f:form.textarea property="content" class="blog-form-textarea" rows="4" />
+                                    <f:form.submit value="Save" class="blog-comment-save" />
+                                    <button type="button" class="blog-comment-cancel">Cancel</button>
+                                </f:form>
+                                <div class="blog-comment-actions">
+                                    <button type="button" class="blog-comment-edit" data-comment-edit>
+                                        Edit
+                                    </button>
+                                    <f:link.action action="deleteComment" controller="Blog"
+                                        arguments="{blog: blog, comment: comment}" class="blog-comment-delete"
+                                        onclick="return confirm('Are you sure you want to delete this comment?');">
+                                        Delete
+                                    </f:link.action>
+                                </div>
+
+                                <f:for each="{replies}" as="reply">
+                                    <f:if condition="{reply.commentReply.uid} == {comment.uid}">
+                                        <div class="blog-comment blog-comment-reply">
+                                            <div class="blog-comment-meta">
+                                                <strong>{reply.user}</strong>
+                                                <span><f:format.date date="{reply.publishDate}" format="d.m.Y H:i" /></span>
+                                            </div>
+                                            <p class="blog-comment-content">{reply.content}</p>
+                                            <f:form action="updateComment" controller="Blog" objectName="comment" object="{reply}"
+                                                method="post" class="blog-comment-edit-form" hidden="hidden">
+                                                <f:form.hidden property="user" />
+                                                <f:form.textarea property="content" class="blog-form-textarea" rows="4" />
+                                                <f:form.submit value="Save" class="blog-comment-save" />
+                                                <button type="button" class="blog-comment-cancel">Cancel</button>
+                                            </f:form>
+                                            <div class="blog-comment-actions">
+                                                <button type="button" class="blog-comment-edit" data-comment-edit>
+                                                    Edit
+                                                </button>
+                                                <f:link.action action="deleteComment" controller="Blog"
+                                                    arguments="{blog: blog, comment: reply}" class="blog-comment-delete"
+                                                    onclick="return confirm('Are you sure you want to delete this reply?');">
+                                                    Delete
+                                                </f:link.action>
+                                            </div>
+                                        </div>
+                                    </f:if>
+                                </f:for>
+
+                                <details class="blog-reply-details">
+                                    <summary>Reply to this comment</summary>
+                                    <f:form action="createComment" controller="Blog" method="post" class="blog-comment-form blog-reply-form">
+                                        <f:form.hidden name="blog" value="{blog.uid}" />
+                                        <f:form.hidden name="parentComment" value="{comment.uid}" />
+                                        <f:form.textfield name="user" class="blog-form-input" placeholder="Your name" required="required" />
+                                        <f:form.textarea name="content" class="blog-form-textarea" rows="3" placeholder="Write a reply..." required="required" />
+                                        <f:form.submit value="Post reply" class="blog-comment-submit" />
+                                    </f:form>
+                                </details>
+                            </article>
+                        </f:for>
+                    </div>
+                </section>
+            </article>
+        </div>
+    </section>
+
+    <script>
+        document.querySelectorAll('[data-comment-edit]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                const comment = button.closest('.blog-comment');
+                comment.querySelector('.blog-comment-content').hidden = true;
+                comment.querySelector('.blog-comment-edit-form').hidden = false;
+                comment.querySelector('[data-comment-edit]').hidden = true;
+            });
+        });
+
+        document.querySelectorAll('.blog-comment-cancel').forEach(function (button) {
+            button.addEventListener('click', function () {
+                const comment = button.closest('.blog-comment');
+                comment.querySelector('.blog-comment-content').hidden = false;
+                comment.querySelector('.blog-comment-edit-form').hidden = true;
+                comment.querySelector('[data-comment-edit]').hidden = false;
+            });
+        });
+    </script>
+
+</f:section>

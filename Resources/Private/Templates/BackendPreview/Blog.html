@@ -1,0 +1,23 @@
+<div style="padding: 16px; border: 1px solid #d9d9d9; background: #ffffff; font-family: sans-serif;">
+	<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; color: #635bff; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;">
+		<span aria-hidden="true">&#9670;</span>
+		Blog system
+	</div>
+
+	<f:if condition="{data.header}">
+		<f:then>
+			<h2 style="margin: 0 0 8px; color: #171923; font-size: 22px;">{data.header}</h2>
+		</f:then>
+		<f:else>
+			<h2 style="margin: 0 0 8px; color: #171923; font-size: 22px;">Blog list</h2>
+		</f:else>
+	</f:if>
+
+	<p style="margin: 0 0 16px; color: #6b7280; line-height: 1.5;">
+		Displays the latest blog articles with links to their detail pages.
+	</p>
+
+	<div style="padding: 10px 12px; background: #f1f0ff; color: #4f46e5; font-size: 12px; font-weight: 700;">
+		Blog list and detail plugin
+	</div>
+</div>

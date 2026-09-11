@@ -1,0 +1,101 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+<f:section name="Main">
+    <section class="blog-create-section">
+        <div class="container">
+
+            <div class="blog-list-header">
+                <div>
+                    <span class="blog-list-eyebrow">Create</span>
+
+                    <h1 class="blog-list-title">
+                        Add Blog
+                    </h1>
+
+                    <p class="blog-list-subtitle">
+                        Share a new article with your readers and publish it to the blog list.
+                    </p>
+                </div>
+            </div>
+
+            <f:flashMessages />
+
+            <f:form action="create" controller="Blog" objectName="blog" object="{blog}" method="post"
+                enctype="multipart/form-data" class="blog-create-form">
+
+                <div class="blog-create-grid">
+
+                    <div class="blog-form-field">
+                        <label for="title">Blog Title</label>
+
+                        <f:form.textfield id="title" property="title" class="blog-form-input" required="required"
+                            placeholder="Enter blog title" />
+                    </div>
+
+                    <div class="blog-form-field">
+                        <label for="author">Author</label>
+
+                        <f:form.textfield id="author" property="author" class="blog-form-input" required="required"
+                            placeholder="Author name" />
+                    </div>
+
+                    <div class="blog-form-field">
+                        <label for="publishDate">Publish Date</label>
+
+                        <f:form.textfield id="publishDate" property="publishDate" type="datetime-local"
+                            class="blog-form-input" />
+                    </div>
+
+                    <div class="blog-form-field">
+                        <label for="category">Category</label>
+
+                        <f:form.select
+                            id="category"
+                            property="category"
+                            options="{categories}"
+                            optionValueField="uid"
+                            optionLabelField="name"
+                            class="blog-form-input"
+                        />
+                    </div>
+
+
+                    <div class="blog-form-field blog-form-field-full">
+                        <label for="description">Description</label>
+
+                        <f:form.textarea id="description" property="description" class="blog-form-textarea" rows="8"
+                            placeholder="Write your blog description here..." />
+                    </div>
+
+                    <div class="blog-form-field blog-form-field-full">
+                        <label for="thumbnail">Thumbnail</label>
+
+                        <f:form.upload
+                            id="thumbnail"
+                            property="thumbnail"
+                            class="blog-form-upload"
+                        />
+                    </div>
+
+                </div>
+
+                <div class="blog-form-actions">
+
+                    <f:link.action action="list" controller="Blog" class="blog-form-cancel">
+                        Cancel
+                    </f:link.action>
+
+                    <f:form.submit value="Save Blog" class="save-blog-submit" />
+
+
+                </div>
+
+            </f:form>
+
+        </div>
+    </section>
+</f:section>
+
+</html>

@@ -1,0 +1,16 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:blog="http://typo3.org/ns/Nitsan/BlogSystem/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+<f:spaceless>
+
+
+    <f:asset.css identifier="blog-frontend" href="EXT:blog_system/Resources/Public/Css/Frontend.css" />
+    <f:asset.script identifier="blog-frontend-js" src="EXT:blog_system/Resources/Public/JavaScript/Frontend.js" />
+
+    <div class="container my-4">
+        <f:render section="Main" />
+    </div>
+
+</f:spaceless>
+</html>

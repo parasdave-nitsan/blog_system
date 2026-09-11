@@ -1,0 +1,11 @@
+plugin.tx_blogsystem_blog {
+    view {
+        templateRootPaths.10 = EXT:blog_system/Resources/Private/Templates/
+        partialRootPaths.10 = EXT:blog_system/Resources/Private/Partials/
+        layoutRootPaths.10 = EXT:blog_system/Resources/Private/Layouts/
+    }
+
+    persistence {
+        storagePid = 1
+    }
+}

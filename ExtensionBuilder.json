@@ -1,0 +1,49 @@
+{
+    "modules": [],
+    "wires": [],
+    "properties": {
+        "name": "Blog",
+        "vendorName": "Nitsan",
+        "extensionKey": "blog_system",
+        "originalExtensionKey": "",
+        "originalVendorName": "",
+        "description": "The Complete blog system under one extension.",
+        "emConf": {
+            "category": "plugin",
+            "custom_category": "",
+            "version": "1.0.0",
+            "state": "alpha",
+            "disableVersioning": false,
+            "disableLocalization": false,
+            "generateDocumentationTemplate": true,
+            "generateEmptyGitRepository": true,
+            "generateEditorConfig": true,
+            "generateSiteSet": false,
+            "sourceLanguage": "en",
+            "targetVersion": "13.4.0-13.4.99",
+            "dependsOn": "typo3 => 13.4.0-13.4.99\n"
+        },
+        "category": "plugin",
+        "custom_category": "",
+        "version": "1.0.0",
+        "state": "alpha",
+        "disableVersioning": false,
+        "disableLocalization": false,
+        "generateDocumentationTemplate": true,
+        "generateEmptyGitRepository": true,
+        "generateEditorConfig": true,
+        "generateSiteSet": false,
+        "sourceLanguage": "en",
+        "targetVersion": "13.4.0-13.4.99",
+        "dependsOn": "typo3 => 13.4.0-13.4.99\n",
+        "persons": [],
+        "plugins": [],
+        "backendModules": []
+    },
+    "storagePath": "\/var\/www\/html\/packages\/",
+    "log": {
+        "last_modified": "2026-09-08 04:14",
+        "extension_builder_version": "13.3.4",
+        "be_user": " (1)"
+    }
+}
