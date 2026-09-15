@@ -22,6 +22,8 @@ use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
 use TYPO3\CMS\Core\Resource\Security\FileNameValidator;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use Nitsan\BlogSystem\Event\CommentFilterationEvent;
 
 
 class BlogController extends ActionController
@@ -77,8 +79,6 @@ class BlogController extends ActionController
         return $this->htmlResponse();
     }
 
-
-
     public function showAction(Blog $blog): ResponseInterface
     {
 
@@ -107,6 +107,12 @@ class BlogController extends ActionController
             $this->addFlashMessage('Please enter your name and a comment.');
             return $this->redirect('show', null, null, ['blog' => $blogRecord ?? $blog]);
         }
+
+        $event = $this->eventDispatcher->dispatch(
+            new CommentFilterationEvent($content)
+        );
+
+        $content = $event->getCommentData();
 
         $comment = new Comment();
         $comment->setBlog($blogRecord);
@@ -264,10 +270,6 @@ class BlogController extends ActionController
         return $this->redirect('list');
     }
 
-    /**
-     * Manually validates and stores an uploaded thumbnail, returning
-     * an Extbase FileReference ready to attach to a Blog, or null on failure.
-     */
     protected function handleThumbnailUpload(array $uploadedFile): ?ExtbaseFileReference
     {
         if ($uploadedFile['error'] !== \UPLOAD_ERR_OK) {
@@ -307,8 +309,6 @@ class BlogController extends ActionController
 
         return $fileReference;
     }
-
-
     
     public function deleteAction(Blog $blog): ResponseInterface
     {

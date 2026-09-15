@@ -31,20 +31,12 @@
 
             <f:flashMessages />
 
-            <f:form action="list" controller="Blog" method="get" noCache="1" class="blog-filter-form">
+            <form id="blog-filter-form" class="blog-filter-form">
                 <div class="blog-filter-field">
                     <label for="blog-filter-category">Category</label>
-                    <f:form.select
-                        id="blog-filter-category"
-                        name="category"
-                        options="{categories}"
-                        optionValueField="uid"
-                        optionLabelField="name"
-                        prependOptionLabel="All categories"
-                        prependOptionValue="0"
-                        value="{selectedCategory}"
-                        class="blog-filter-select"
-                    />
+                    <f:form.select id="blog-filter-category" name="category" options="{categories}"
+                        optionValueField="uid" optionLabelField="name" prependOptionLabel="All categories"
+                        prependOptionValue="0" value="{selectedCategory}" class="blog-filter-select" />
                 </div>
 
                 <div class="blog-filter-field">
@@ -57,92 +49,96 @@
 
                 <div class="blog-filter-field">
                     <label for="blog-filter-direction">Order</label>
-                    <f:form.select id="blog-filter-direction" name="direction" value="{direction}" class="blog-filter-select">
+                    <f:form.select id="blog-filter-direction" name="direction" value="{direction}"
+                        class="blog-filter-select">
                         <f:form.select.option value="DESC">Descending</f:form.select.option>
                         <f:form.select.option value="ASC">Ascending</f:form.select.option>
                     </f:form.select>
                 </div>
 
                 <f:form.submit value="Apply filters" class="blog-filter-submit" />
-            </f:form>
+            </form>
 
             <f:if condition="{blogs -> f:count()}">
 
                 <f:then>
-                    <div class="blog-grid">
+                    <div id="reload-container">
 
-                        <f:for each="{blogs}" as="blog" iteration="iterator">
 
-                            <article class="blog-card js-blog-card" style="--card-index: {iterator.index};">
+                        <div class="blog-grid">
 
-                                <div class="blog-card-gradient"></div>
+                            <f:for each="{blogs}" as="blog" iteration="iterator">
 
-                                <f:if condition="{blog.thumbnail}">
-                                    <f:image image="{blog.thumbnail}" class="blog-card-thumbnail" alt="{blog.title}"
-                                        width="800c" height="420c" />
-                                </f:if>
+                                <article class="blog-card js-blog-card" style="--card-index: {iterator.index};">
 
-                                <div class="blog-card-content">
+                                    <div class="blog-card-gradient"></div>
 
-                                    <div class="blog-card-top">
-                                        <span class="blog-number">
-                                            {iterator.cycle}
-                                        </span>
+                                    <f:if condition="{blog.thumbnail}">
+                                        <f:image image="{blog.thumbnail}" class="blog-card-thumbnail" alt="{blog.title}"
+                                            width="800c" height="420c" />
+                                    </f:if>
 
-                                        <f:link.action action="show" arguments="{blog: blog}" class="blog-read">
-                                            Read article
-                                            <span class="blog-arrow" aria-hidden="true">→</span>
-                                        </f:link.action>
-                                    </div>
+                                    <div class="blog-card-content">
 
-                                    <h2 class="blog-card-title">
-                                        <f:link.action action="show" arguments="{blog: blog}">
-                                            {blog.title}
-                                        </f:link.action>
-                                    </h2>
-
-                                    <div class="blog-card-description">
-                                        {blog.description -> f:format.raw()}
-                                    </div>
-
-                                    <div class="blog-card-footer">
-
-                                        <div class="blog-author">
-                                            <span class="author-avatar">
-                                                {blog.author -> f:format.crop(maxCharacters: 1)}
+                                        <div class="blog-card-top">
+                                            <span class="blog-number">
+                                                {iterator.cycle}
                                             </span>
 
-                                            <div class="author-info">
-                                                <span class="meta-label">Written by</span>
-                                                <span class="author-name">
-                                                    {blog.author}
+                                            <f:link.action action="show" arguments="{blog: blog}" class="blog-read">
+                                                Read article
+                                                <span class="blog-arrow" aria-hidden="true">→</span>
+                                            </f:link.action>
+                                        </div>
+
+                                        <h2 class="blog-card-title">
+                                            <f:link.action action="show" arguments="{blog: blog}">
+                                                {blog.title}
+                                            </f:link.action>
+                                        </h2>
+
+                                        <div class="blog-card-description">
+                                            {blog.description -> f:format.raw()}
+                                        </div>
+
+                                        <div class="blog-card-footer">
+
+                                            <div class="blog-author">
+                                                <span class="author-avatar">
+                                                    {blog.author -> f:format.crop(maxCharacters: 1)}
                                                 </span>
+
+                                                <div class="author-info">
+                                                    <span class="meta-label">Written by</span>
+                                                    <span class="author-name">
+                                                        {blog.author}
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="blog-views">
-                                            <span class="views-icon">◉</span>
-                                            <blog:readingTime content="{blog.description}" />
-                                            <span class="views-label">min read</span>
-                                        </div>
+                                            <div class="blog-views">
+                                                <span class="views-icon">◉</span>
+                                                <blog:readingTime content="{blog.description}" />
+                                                <span class="views-label">min read</span>
+                                            </div>
 
-                                        <div class="blog-views">
-                                            <span class="views-icon">◉</span>
-                                            <span>{blog.views}</span>
-                                            <span class="views-label">views</span>
+                                            <div class="blog-views">
+                                                <span class="views-icon">◉</span>
+                                                <span>{blog.views}</span>
+                                                <span class="views-label">views</span>
+                                            </div>
+
                                         </div>
 
                                     </div>
 
-                                </div>
+                                </article>
 
-                            </article>
+                            </f:for>
 
-                        </f:for>
+                        </div>
 
-                    </div>
-
-                    <f:if condition="{paginator.numberOfPages} > 1">
+                        <!-- <f:if condition="{paginator.numberOfPages} > 1">
                         <nav class="blog-pagination" aria-label="Blog pagination">
 
                             <f:if condition="{pagination.previousPageNumber}">
@@ -181,9 +177,28 @@
                             </f:if>
 
                         </nav>
-                    </f:if>
+                    </f:if> -->
 
-
+                        <ul class="pagination blog-pagination">
+                            <f:if condition="{pagination.previousPageNumber}">
+                                <li class="page-item">
+                                    <a class="page-link ajax-pagination-link"
+                                        href="{f:uri.action(action:'list', arguments:{currentPage: pagination.previousPageNumber, category: selectedCategory, sortBy: sortBy, direction: direction})}">
+                                        Previous
+                                    </a>
+                                </li>
+                            </f:if>
+                            <f:for each="{pagination.allPageNumbers}" as="pageNumber">
+                                <li
+                                    class="page-item {f:if(condition: '{pageNumber} == {currentPage}', then: 'active')}">
+                                    <a class="page-link ajax-pagination-link"
+                                        href="{f:uri.action(action:'list', arguments:{currentPage: pageNumber, category: selectedCategory, sortBy: sortBy, direction: direction})}">
+                                        {pageNumber}
+                                    </a>
+                                </li>
+                            </f:for>
+                        </ul>
+                    </div>
                 </f:then>
 
                 <f:else>
