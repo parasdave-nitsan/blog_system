@@ -8,16 +8,20 @@ use Nitsan\BlogSystem\Domain\Model\Blog;
 use Nitsan\BlogSystem\Domain\Repository\BlogRepository;
 use Nitsan\BlogSystem\Domain\Model\Comment;
 use Nitsan\BlogSystem\Domain\Repository\CommentRepository;
-use Nitsan\BlogSystem\Domain\Model\Category;
 use Nitsan\BlogSystem\Domain\Repository\CategoryRepository;
 use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Resource\Enum\DuplicationBehavior;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation\IgnoreValidation;
+use TYPO3\CMS\Extbase\Domain\Model\FileReference as ExtbaseFileReference;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter;
-use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
+use TYPO3\CMS\Core\Resource\Security\FileNameValidator;
+use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 
 
 class BlogController extends ActionController
@@ -25,7 +29,9 @@ class BlogController extends ActionController
     public function __construct(
         private readonly BlogRepository $blogRepository,
         private readonly CommentRepository $commentRepository,
-        private readonly CategoryRepository $categoryRepository
+        private readonly CategoryRepository $categoryRepository,
+        private readonly ResourceFactory $resourceFactory,
+        private readonly PersistenceManagerInterface $persistenceManager
     ) {}
 
     public function listAction(
@@ -172,57 +178,49 @@ class BlogController extends ActionController
             $blog = new Blog();
         }
 
-        $categories = $this->categoryRepository->findAll();
-
         $this->view->assign('blog', $blog);
-        $this->view->assign('categories', $categories);
+        $this->view->assign('categories', $this->categoryRepository->findAll());
 
         return $this->htmlResponse();
     }
 
     public function initializeCreateAction(): void
     {
-        $propertyMappingConfiguration =
-            $this->arguments->getArgument('blog')->getPropertyMappingConfiguration();
-
-        $propertyMappingConfiguration
+        $this->arguments->getArgument('blog')
+            ->getPropertyMappingConfiguration()
             ->forProperty('publishDate')
             ->setTypeConverterOption(
                 DateTimeConverter::class,
                 DateTimeConverter::CONFIGURATION_DATE_FORMAT,
                 'Y-m-d\TH:i'
             );
-
     }
 
     public function createAction(?Blog $blog = null): ResponseInterface
     {
         if ($blog === null) {
-            $this->addFlashMessage(
-                'Blog data is missing. Please try again.'
-            );
-
+            $this->addFlashMessage('Blog data is missing. Please try again.');
             return $this->redirect('new');
         }
 
-        $this->blogRepository->add($blog);
+        $uploadedFile = $_FILES['thumbnailUpload'] ?? null;
 
+        if ($uploadedFile && $uploadedFile['error'] !== \UPLOAD_ERR_NO_FILE) {
+            $fileReference = $this->handleThumbnailUpload($uploadedFile);
+            if ($fileReference !== null) {
+                $blog->setThumbnail($fileReference);
+            }
+        }
+
+        $this->blogRepository->add($blog);
         $this->addFlashMessage('Blog created successfully.');
 
-        return $this->redirect('list');
-    }
-
-    public function deleteAction(Blog $blog): ResponseInterface
-    {
-        $this->blogRepository->remove($blog);
-        $this->addFlashMessage('Blog deleted successfully.');
         return $this->redirect('list');
     }
 
     #[IgnoreValidation(['argumentName' => 'blog'])]
     public function editAction(Blog $blog): ResponseInterface
     {
-        \TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($blog, __FILE__.''.__LINE__);
         $this->view->assignMultiple([
             'blog' => $blog,
             'categories' => $this->categoryRepository->findAll(),
@@ -232,22 +230,90 @@ class BlogController extends ActionController
 
     public function initializeUpdateAction(): void
     {
-        $propertyMappingConfiguration =
-        $this->arguments->getArgument('blog')->getPropertyMappingConfiguration();
-        
-        $propertyMappingConfiguration
-        ->forProperty('publishDate')
-        ->setTypeConverterOption(
-            DateTimeConverter::class,
-            DateTimeConverter::CONFIGURATION_DATE_FORMAT,
-            'Y-m-d\TH:i'
+        $this->arguments->getArgument('blog')
+            ->getPropertyMappingConfiguration()
+            ->forProperty('publishDate')
+            ->setTypeConverterOption(
+                DateTimeConverter::class,
+                DateTimeConverter::CONFIGURATION_DATE_FORMAT,
+                'Y-m-d\TH:i'
             );
     }
 
     public function updateAction(Blog $blog): ResponseInterface
     {
+        $uploadedFile = $_FILES['thumbnailUpload'] ?? null;
+
+        if ($uploadedFile && $uploadedFile['error'] !== \UPLOAD_ERR_NO_FILE) {
+            $newFileReference = $this->handleThumbnailUpload($uploadedFile);
+
+            if ($newFileReference !== null) {
+                $oldThumbnail = $blog->getThumbnail();
+
+                $blog->setThumbnail($newFileReference);
+
+                if ($oldThumbnail !== null) {
+                    $this->persistenceManager->remove($oldThumbnail);
+                }
+            }
+        }
+
         $this->blogRepository->update($blog);
         $this->addFlashMessage('Blog updated successfully.');
+
+        return $this->redirect('list');
+    }
+
+    /**
+     * Manually validates and stores an uploaded thumbnail, returning
+     * an Extbase FileReference ready to attach to a Blog, or null on failure.
+     */
+    protected function handleThumbnailUpload(array $uploadedFile): ?ExtbaseFileReference
+    {
+        if ($uploadedFile['error'] !== \UPLOAD_ERR_OK) {
+            $this->addFlashMessage('The file upload failed (error code ' . $uploadedFile['error'] . ').', '', AbstractMessage::ERROR);
+            return null;
+        }
+
+        $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        if (!in_array($uploadedFile['type'], $allowedMimeTypes, true)) {
+            $this->addFlashMessage('Only JPEG, PNG or WEBP images are allowed.', '', AbstractMessage::ERROR);
+            return null;
+        }
+
+        $maxFileSize = 2 * 1024 * 1024; // 2MB
+        if ($uploadedFile['size'] > $maxFileSize) {
+            $this->addFlashMessage('The thumbnail must not exceed 2MB.', '', AbstractMessage::ERROR);
+            return null;
+        }
+
+        if (!GeneralUtility::makeInstance(FileNameValidator::class)->isValid($uploadedFile['name'])) {
+            $this->addFlashMessage('This file type is not allowed.', '', AbstractMessage::ERROR);
+            return null;
+        }
+
+        $uploadFolder = $this->resourceFactory->retrieveFileOrFolderObject('1:/user_upload/blog/');
+        $falFile = $uploadFolder->addUploadedFile($uploadedFile, DuplicationBehavior::RENAME);
+
+        $falFileReference = $this->resourceFactory->createFileReferenceObject([
+            'uid_local' => $falFile->getUid(),
+            'uid_foreign' => uniqid('NEW_'),
+            'uid' => uniqid('NEW_'),
+            'crop' => null,
+        ]);
+
+        $fileReference = GeneralUtility::makeInstance(ExtbaseFileReference::class);
+        $fileReference->setOriginalResource($falFileReference);
+
+        return $fileReference;
+    }
+
+
+    
+    public function deleteAction(Blog $blog): ResponseInterface
+    {
+        $this->blogRepository->remove($blog);
+        $this->addFlashMessage('Blog deleted successfully.');
         return $this->redirect('list');
     }
 }

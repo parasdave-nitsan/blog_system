@@ -8,7 +8,7 @@ CREATE TABLE tx_blogsystem_domain_model_blog (
     description text DEFAULT '' NOT NULL,
     author varchar(255) DEFAULT '' NOT NULL,
     publish_date int(11) DEFAULT '0' NOT NULL,
-    thumbnail varchar(255) DEFAULT '' NOT NULL,
+    thumbnail int(11) DEFAULT '0' NOT NULL,
     views int(11) DEFAULT '0' NOT NULL,
     category int(11) DEFAULT '0' NOT NULL
 );

@@ -19,32 +19,33 @@ class Blog extends AbstractEntity
 
     protected string $author = '';
 
-    protected int $category = 0;
+    protected int $category = 0;    
 
     protected ?\DateTime $publishDate = null;
 
     protected ObjectStorage $comments;
 
-    #[FileUpload([
-        'validation' => [
-            'required' => false,
-            'maxFiles' => 1,
-            'fileSize' => [
-                'minimum' => '0K',
-                'maximum' => '2M',
-            ],
-            'mimeType' => [
-                'allowedMimeTypes' => [
-                    'image/jpeg',
-                    'image/png',
-                    'image/webp',
-                ],
-            ],
-        ],
-        'uploadFolder' => '1:/user_upload/blog/',
-        'addRandomSuffix' => true,
-        'duplicationBehavior' => DuplicationBehavior::RENAME,
-    ])]
+    // #[FileUpload([
+    //     'validation' => [
+    //         'required' => false,
+    //         'maxFiles' => 1,
+    //         'fileSize' => [
+    //             'minimum' => '0K',
+    //             'maximum' => '2M',
+    //         ],
+    //         'mimeType' => [
+    //             'allowedMimeTypes' => [
+    //                 'image/jpeg',
+    //                 'image/png',
+    //                 'image/webp',
+    //             ],
+    //         ],
+    //         'imageDimensions' => ['maxWidth' => 4096, 'maxHeight' => 4096]
+    //     ],
+    //     'uploadFolder' => '1:/user_upload/blog/',
+    //     'addRandomSuffix' => false,
+    //     'duplicationBehavior' => DuplicationBehavior::RENAME,
+    // ])]
     protected ?FileReference $thumbnail = null;
 
 
@@ -90,12 +91,12 @@ class Blog extends AbstractEntity
         $this->publishDate = $publishDate;
     }
 
-    public function getThumbnail(): ?\TYPO3\CMS\Extbase\Domain\Model\FileReference
+    public function getThumbnail(): ?FileReference
     {
         return $this->thumbnail;
     }
 
-    public function setThumbnail(?\TYPO3\CMS\Extbase\Domain\Model\FileReference $thumbnail): void
+    public function setThumbnail(?FileReference $thumbnail): void
     {
         $this->thumbnail = $thumbnail;
     }

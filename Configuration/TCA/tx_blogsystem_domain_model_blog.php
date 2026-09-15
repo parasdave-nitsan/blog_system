@@ -75,7 +75,6 @@ return [
             'config' => [
                 'type' => 'file',
                 'allowed' => [
-                    'jpg',
                     'jpeg',
                     'png',
                     'webp',
