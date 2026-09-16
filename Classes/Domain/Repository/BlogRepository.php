@@ -14,27 +14,39 @@ class BlogRepository extends Repository
      */
     protected $objectType = Blog::class;
 
-    public function findFiltered(int $category, string $sortBy, string $direction)
-    {
+    public function findFiltered(int $category,string $sortBy,string $direction) {
+
         $query = $this->createQuery();
 
+        $constraints = [
+            $query->equals('publishStatus', 'published'),
+        ];
+
         if ($category > 0) {
-            $query->matching($query->equals('category', $category));
+            $constraints[] = $query->equals('category', $category);
         }
 
-        $sortBy = in_array($sortBy, ['publishDate', 'views'], true) ? $sortBy : 'publishDate';
+        $query->matching(
+            $query->logicalAnd(...$constraints)
+        );
+
+        $sortBy = in_array( $sortBy,['publishDate', 'views'],true) ? $sortBy : 'publishDate';
+
         $direction = strtoupper($direction) === 'ASC' ? 'ASC' : 'DESC';
 
-        $query->setOrderings([$sortBy => $direction]);
+        $query->setOrderings([
+            $sortBy => $direction,
+        ]);
 
         return $query->execute();
     }
 
 
+
     public function search(string $search): array
     {
         $search = trim($search);
-        
+
         if ($search === '') {
             return [];
         }
@@ -51,6 +63,36 @@ class BlogRepository extends Repository
         $query->matching(
             $query->logicalOr(...$constraints)
         );
+
+        return $query->execute()->toArray();
+    }
+
+    public function slugExists(string $slug): bool
+    {
+        $query = $this->createQuery();
+
+        $query->matching(
+            $query->equals('slug', $slug)
+        );
+
+        return $query->count() > 0;
+    }
+    public function countAll(): int
+    {
+        return $this->count([]);
+    }
+
+    public function findDrafts(): array
+    {
+        $query = $this->createQuery();
+
+        $query->matching(
+            $query->equals('publish_status', 'draft')
+        );
+
+        $query->setOrderings([
+            'crdate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING,
+        ]);
 
         return $query->execute()->toArray();
     }

@@ -103,5 +103,20 @@ return [
                 'maxitems' => 1,
             ],
         ],
+
+        'slug' => [
+            'label' => 'Slug',
+            'config' => [
+                'type' => 'input',
+                'readOnly' => true,
+            ],
+        ],
+
+        'publish_status'=> [
+            'label'=> 'Publish status',
+            'config'=> [
+                'type'=> 'input',
+            ]
+        ]
     ],
 ];

@@ -22,7 +22,6 @@ use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
 use TYPO3\CMS\Core\Resource\Security\FileNameValidator;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Nitsan\BlogSystem\Event\CommentFilterationEvent;
 
 
@@ -316,4 +315,7 @@ class BlogController extends ActionController
         $this->addFlashMessage('Blog deleted successfully.');
         return $this->redirect('list');
     }
+
+    
+
 }

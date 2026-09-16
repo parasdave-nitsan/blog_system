@@ -12,10 +12,3 @@ services:
       - name: event.listener
         identifier: 'comment-filteration'
         event: Nitsan\BlogSystem\Event\CommentFilterationEvent
-  
-  Nitsan\BlogSystem\EventListener\BeforeActionCallListener:
-    tags:
-      - name: event.listener
-        identifier: 'blog-before-action'
-        event: TYPO3\CMS\Extbase\Event\Mvc\BeforeActionCallEvent
-

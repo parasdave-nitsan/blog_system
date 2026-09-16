@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace Nitsan\BlogSystem\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Core\Resource\Enum\DuplicationBehavior;
-use TYPO3\CMS\Extbase\Annotation\FileUpload;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-use Nitsan\BlogSystem\Domain\Model\Category;
 
 class Blog extends AbstractEntity
 {
@@ -19,35 +16,17 @@ class Blog extends AbstractEntity
 
     protected string $author = '';
 
-    protected int $category = 0;    
+    protected int $category = 0;
+
+    protected string $slug = '';
+
+    protected string $publishStatus = '';
 
     protected ?\DateTime $publishDate = null;
 
     protected ObjectStorage $comments;
 
-    // #[FileUpload([
-    //     'validation' => [
-    //         'required' => false,
-    //         'maxFiles' => 1,
-    //         'fileSize' => [
-    //             'minimum' => '0K',
-    //             'maximum' => '2M',
-    //         ],
-    //         'mimeType' => [
-    //             'allowedMimeTypes' => [
-    //                 'image/jpeg',
-    //                 'image/png',
-    //                 'image/webp',
-    //             ],
-    //         ],
-    //         'imageDimensions' => ['maxWidth' => 4096, 'maxHeight' => 4096]
-    //     ],
-    //     'uploadFolder' => '1:/user_upload/blog/',
-    //     'addRandomSuffix' => false,
-    //     'duplicationBehavior' => DuplicationBehavior::RENAME,
-    // ])]
     protected ?FileReference $thumbnail = null;
-
 
     protected int $views = 0;
 
@@ -136,5 +115,25 @@ class Blog extends AbstractEntity
     public function getComments(): ObjectStorage
     {
         return $this->comments;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): void
+    {
+        $this->slug = $slug;
+    }
+
+    public function getPublishStatus(): string
+    {
+        return $this->publishStatus;
+    }
+
+    public function setPublishStatus(string $publishStatus): void
+    {
+        $this->publishStatus = $publishStatus;
     }
 }

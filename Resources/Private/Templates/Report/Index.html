@@ -1,0 +1,286 @@
+
+<f:layout name="Report" />
+
+<f:section name="main">
+
+    <div class="blog-dashboard">
+
+        <!-- Dashboard Header -->
+        <div class="dashboard-header mb-4">
+            <div>
+                <h1 class="dashboard-title">Blog Dashboard</h1>
+
+                <p class="dashboard-subtitle">
+                    Manage your blog posts and drafts
+                </p>
+            </div>
+        </div>
+
+
+        <!-- Statistics -->
+        <div class="row g-4 mb-4">
+
+            <div class="col-md-4">
+                <div class="stat-card stat-card-primary">
+
+                    <div class="stat-card-icon">
+                        <span class="icon icon-blog">
+                            <i class="fa fa-file-text-o"></i>
+                        </span>
+                    </div>
+
+                    <div class="stat-card-content">
+
+                        <span class="stat-label">
+                            Total Blogs
+                        </span>
+
+                        <span class="stat-value">
+                            {totalBlogs}
+                        </span>
+
+                        <span class="stat-description">
+                            All blog posts
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="stat-card stat-card-warning">
+
+                    <div class="stat-card-icon">
+                        <span class="icon">
+                            <i class="fa fa-pencil"></i>
+                        </span>
+                    </div>
+
+                    <div class="stat-card-content">
+
+                        <span class="stat-label">
+                            Draft Blogs
+                        </span>
+
+                        <span class="stat-value">
+                            {draftBlogs -> f:count()}
+                        </span>
+
+                        <span class="stat-description">
+                            Waiting to be published
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Draft Blogs -->
+        <div class="card dashboard-card">
+
+            <div class="card-header dashboard-card-header">
+
+                <div>
+                    <h2 class="card-title">
+                        Draft Blogs
+                    </h2>
+
+                    <span class="card-subtitle">
+                        Review and publish your draft posts
+                    </span>
+                </div>
+
+                <span class="draft-count">
+                    {draftBlogs -> f:count()} Drafts
+                </span>
+
+            </div>
+
+
+            <div class="card-body p-0">
+
+                <f:if condition="{draftBlogs}">
+
+                    <div class="table-responsive">
+
+                        <table class="table draft-table mb-0">
+
+                            <thead>
+                                <tr>
+                                    <th>Blog</th>
+                                    <th>Author</th>
+                                    <th>Publish Date</th>
+                                    <th>Status</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+
+
+                            <tbody>
+
+                                <f:for each="{draftBlogs}" as="blog">
+
+                                    <tr>
+
+                                        <!-- Blog -->
+                                        <td>
+
+                                            <div class="blog-info">
+
+                                                <div class="blog-thumbnail">
+
+                                                    <f:if condition="{blog.thumbnail}">
+
+                                                        <f:then>
+
+                                                            <f:image
+                                                                image="{blog.thumbnail}"
+                                                                width="55"
+                                                                height="55"
+                                                                cropVariant="default"
+                                                                alt="{blog.title}"
+                                                            />
+
+                                                        </f:then>
+
+                                                        <f:else>
+
+                                                            <div class="thumbnail-placeholder">
+                                                                <i class="fa fa-file-text-o"></i>
+                                                            </div>
+
+                                                        </f:else>
+
+                                                    </f:if>
+
+                                                </div>
+
+
+                                                <div class="blog-details">
+
+                                                    <div class="blog-title">
+                                                        {blog.title}
+                                                    </div>
+
+                                                    <div class="blog-slug">
+                                                        /{blog.slug}
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </td>
+
+
+                                        <!-- Author -->
+                                        <td>
+                                            <span class="author-name">
+                                                {blog.author}
+                                            </span>
+                                        </td>
+
+
+                                        <!-- Publish Date -->
+                                        <td>
+
+                                            <f:if condition="{blog.publishDate}">
+
+                                                <f:format.date
+                                                    format="d M Y"
+                                                    date="{blog.publishDate}"
+                                                />
+
+                                            </f:if>
+
+                                        </td>
+
+
+                                        <!-- Status -->
+                                        <td>
+
+                                            <span class="status-badge status-draft">
+
+                                                <span class="status-dot"></span>
+
+                                                Draft
+
+                                            </span>
+
+                                        </td>
+
+
+                                        <!-- Actions -->
+                                        <td class="text-end">
+
+                                            <div class="action-buttons">
+
+                                                <f:link.action
+                                                    action="show"
+                                                    controller="Report"
+                                                    arguments="{blog: blog}"
+                                                    class="btn btn-sm btn-outline-secondary"
+                                                    title="View Blog"
+                                                >
+                                                    <i class="fa fa-eye"></i>
+                                                    <span>View</span>
+                                                </f:link.action>
+
+
+                                                <f:link.action
+                                                    action="published"
+                                                    controller="Report"
+                                                    arguments="{blog: blog}"
+                                                    class="btn btn-sm btn-success"
+                                                    title="Publish Blog"
+                                                >
+                                                    <i class="fa fa-check"></i>
+                                                    <span>Publish</span>
+                                                </f:link.action>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                </f:for>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </f:if>
+
+
+                <!-- Empty State -->
+                <f:if condition="{draftBlogs -> f:count()} == 0">
+
+                    <div class="empty-state">
+
+                        <div class="empty-state-icon">
+                            <i class="fa fa-check-circle"></i>
+                        </div>
+
+                        <h3>No Draft Blogs</h3>
+
+                        <p>
+                            You don't have any blogs waiting to be published.
+                        </p>
+
+                    </div>
+
+                </f:if>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</f:section>

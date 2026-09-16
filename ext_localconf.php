@@ -5,6 +5,9 @@ defined('TYPO3') or die();
 use Nitsan\BlogSystem\Controller\BlogController;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][] =
+    Nitsan\BlogSystem\Hooks\DataHandlerHook::class . '->prepareCacheFlush';
+
 ExtensionUtility::configurePlugin(
     'BlogSystem',
     'Blog',

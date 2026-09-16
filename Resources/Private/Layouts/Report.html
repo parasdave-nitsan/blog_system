@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Blog Dashboard</title>
+
+    <f:asset.css identifier="backend-dashboard" href="EXT:blog_system/Resources/Public/Css/Report.css" />
+</head>
+
+<body class="backend-dashboard">
+
+    <header class="backend-topbar">
+        <div class="backend-topbar-inner">
+
+            <div class="backend-brand">
+                <span class="backend-brand-icon">
+                    <i class="fa fa-file-text-o"></i>
+                </span>
+
+                <span class="backend-brand-title">
+                    Blog Management
+                </span>
+            </div>
+
+            <div class="backend-topbar-right">
+                <span class="backend-module-name">
+                    Backend Module
+                </span>
+            </div>
+
+        </div>
+    </header>
+
+
+    <main class="backend-content">
+        <div class="backend-container">
+
+            <f:render section="main" />
+
+        </div>
+    </main>
+
+
+    <footer class="backend-footer">
+        <div class="backend-footer-inner">
+            <span>
+                Blog Management
+            </span>
+
+            <span>
+                TYPO3 Backend
+            </span>
+        </div>
+    </footer>
+
+</body>
+</html>

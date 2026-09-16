@@ -10,7 +10,9 @@ CREATE TABLE tx_blogsystem_domain_model_blog (
     publish_date int(11) DEFAULT '0' NOT NULL,
     thumbnail int(11) DEFAULT '0' NOT NULL,
     views int(11) DEFAULT '0' NOT NULL,
-    category int(11) DEFAULT '0' NOT NULL
+    category int(11) DEFAULT '0' NOT NULL,
+    slug varchar(255) DEFAULT '' NOT NULL,
+    publish_status varchar(255) DEFAULT 'draft' NOT NULL
 );
 
 create table tx_blogsystem_domain_model_comment (
