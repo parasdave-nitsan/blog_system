@@ -14,7 +14,8 @@ class BlogRepository extends Repository
      */
     protected $objectType = Blog::class;
 
-    public function findFiltered(int $category,string $sortBy,string $direction) {
+    public function findFiltered(int $category, string $sortBy, string $direction)
+    {
 
         $query = $this->createQuery();
 
@@ -30,7 +31,7 @@ class BlogRepository extends Repository
             $query->logicalAnd(...$constraints)
         );
 
-        $sortBy = in_array( $sortBy,['publishDate', 'views'],true) ? $sortBy : 'publishDate';
+        $sortBy = in_array($sortBy, ['publishDate', 'views'], true) ? $sortBy : 'publishDate';
 
         $direction = strtoupper($direction) === 'ASC' ? 'ASC' : 'DESC';
 
@@ -77,10 +78,6 @@ class BlogRepository extends Repository
 
         return $query->count() > 0;
     }
-    public function countAll(): int
-    {
-        return $this->count([]);
-    }
 
     public function findDrafts(): array
     {
@@ -96,4 +93,35 @@ class BlogRepository extends Repository
 
         return $query->execute()->toArray();
     }
+
+    public function getBlogsCount(): array
+    {
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setRespectStoragePage(false);
+
+        $total = $query->count();
+
+        $publishedQuery = $this->createQuery();
+        $publishedQuery->getQuerySettings()->setRespectStoragePage(false);
+        $publishedQuery->matching(
+            $publishedQuery->equals('publishStatus', 'published')
+        );
+
+        $published = $publishedQuery->count();
+
+        $draftQuery = $this->createQuery();
+        $draftQuery->getQuerySettings()->setRespectStoragePage(false);
+        $draftQuery->matching(
+            $draftQuery->equals('publishStatus', 'draft')
+        );
+
+        $drafts = $draftQuery->count();
+
+        return [
+            'total' => $total,
+            'published' => $published,
+            'drafts' => $drafts,
+        ];
+    }
+
 }

@@ -1,0 +1,142 @@
+<f:layout name="SystemMail" />
+
+<f:section name="Main">
+
+    <h1 class="title">
+        Blog overview
+    </h1>
+
+    <p class="intro">
+        Here is the latest overview of your blog content.
+        Review the numbers below to keep your content up to date.
+    </p>
+
+    <!-- Statistics -->
+    <table
+        role="presentation"
+        class="stats-table"
+        width="100%"
+        cellpadding="0"
+        cellspacing="0"
+        border="0"
+    >
+        <tr>
+            <!-- Total -->
+            <td class="stat-cell" width="50%" valign="top">
+                <div class="stat-box">
+                    <div class="stat-label">
+                        Total blogs
+                    </div>
+
+                    <div class="stat-value">
+                        {totalBlogs}
+                    </div>
+                </div>
+            </td>
+
+            <!-- Drafts -->
+            <td class="stat-cell-right" width="50%" valign="top">
+                <div class="stat-box stat-draft">
+                    <div class="stat-label">
+                        Drafts
+                    </div>
+
+                    <div class="stat-value">
+                        {draftBlogs}
+                    </div>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <!-- Published -->
+            <td class="stat-cell" width="50%" valign="top">
+                <div class="stat-box stat-published">
+                    <div class="stat-label">
+                        Published
+                    </div>
+
+                    <div class="stat-value">
+                        {publishedBlogs}
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Draft notice -->
+    <f:if condition="{draftBlogs}">
+        <h2 class="section-title">
+            Drafts need your attention
+        </h2>
+
+        <p class="intro">
+            You currently have
+            <strong>{draftBlogs}</strong>
+            blog(s) saved as draft.
+            Consider reviewing and publishing them.
+        </p>
+    </f:if>
+
+    <!-- Recent blogs -->
+    <f:if condition="{recentBlogs}">
+        <h2 class="section-title">
+            Recent blog activity
+        </h2>
+
+        <table
+            role="presentation"
+            width="100%"
+            cellpadding="0"
+            cellspacing="0"
+            border="0"
+            style="margin-bottom: 24px;"
+        >
+            <f:for each="{recentBlogs}" as="blog">
+                <tr>
+                    <td
+                        style="
+                            padding: 12px 0;
+                            border-bottom: 1px solid #e5e7eb;
+                            font-size: 14px;
+                            line-height: 20px;
+                            color: #374151;
+                        "
+                    >
+                        <strong style="color: #111827;">
+                            {blog.title}
+                        </strong>
+
+                        <f:if condition="{blog.status}">
+                            <br>
+                            <span style="font-size: 12px; color: #6b7280;">
+                                Status: {blog.status}
+                            </span>
+                        </f:if>
+                    </td>
+                </tr>
+            </f:for>
+        </table>
+    </f:if>
+
+    <!-- Action -->
+    <f:if condition="{adminUrl}">
+        <a
+            href="{adminUrl}"
+            class="button"
+            style="
+                display: inline-block;
+                padding: 11px 18px;
+                background-color: #2563eb;
+                color: #ffffff;
+                font-size: 14px;
+                line-height: 20px;
+                font-weight: 600;
+                text-decoration: none;
+            "
+        >
+            Manage blogs
+        </a>
+    </f:if>
+
+</f:section>

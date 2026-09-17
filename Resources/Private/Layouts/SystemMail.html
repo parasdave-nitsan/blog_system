@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>{emailTitle}</title>
+
+    <style>
+        /* Email-safe reset */
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100% !important;
+            background-color: #f4f6f8;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #1f2937;
+        }
+
+        table {
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+
+        img {
+            border: 0;
+            display: block;
+            max-width: 100%;
+        }
+
+        a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .email-wrapper {
+            width: 100%;
+            background-color: #f4f6f8;
+            padding: 32px 0;
+        }
+
+        .email-container {
+            width: 100%;
+            max-width: 640px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+
+        .header {
+            padding: 28px 32px;
+            background-color: #111827;
+        }
+
+        .logo {
+            font-size: 20px;
+            line-height: 28px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .header-subtitle {
+            margin-top: 5px;
+            font-size: 13px;
+            line-height: 20px;
+            color: #9ca3af;
+        }
+
+        .content {
+            padding: 32px;
+        }
+
+        .title {
+            margin: 0 0 8px;
+            font-size: 24px;
+            line-height: 32px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .intro {
+            margin: 0 0 24px;
+            font-size: 14px;
+            line-height: 22px;
+            color: #6b7280;
+        }
+
+        .stats-table {
+            width: 100%;
+            margin-bottom: 28px;
+        }
+
+        .stat-cell {
+            width: 50%;
+            padding: 0 6px 12px 0;
+            vertical-align: top;
+        }
+
+        .stat-cell-right {
+            width: 50%;
+            padding: 0 0 12px 6px;
+            vertical-align: top;
+        }
+
+        .stat-box {
+            padding: 18px;
+            border: 1px solid #e5e7eb;
+            background-color: #f9fafb;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            line-height: 18px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            margin-top: 5px;
+            font-size: 28px;
+            line-height: 34px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .stat-draft {
+            border-color: #fde68a;
+            background-color: #fffbeb;
+        }
+
+        .stat-draft .stat-value {
+            color: #b45309;
+        }
+
+        .stat-published {
+            border-color: #bbf7d0;
+            background-color: #f0fdf4;
+        }
+
+        .stat-published .stat-value {
+            color: #15803d;
+        }
+
+        .section-title {
+            margin: 0 0 12px;
+            font-size: 16px;
+            line-height: 24px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 11px 18px;
+            background-color: #2563eb;
+            color: #ffffff !important;
+            font-size: 14px;
+            line-height: 20px;
+            font-weight: 600;
+        }
+
+        .footer {
+            padding: 24px 32px;
+            background-color: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .footer-text {
+            margin: 0;
+            font-size: 12px;
+            line-height: 18px;
+            color: #9ca3af;
+            text-align: center;
+        }
+
+        @media only screen and (max-width: 640px) {
+            .email-wrapper {
+                padding: 0;
+            }
+
+            .email-container {
+                width: 100% !important;
+            }
+
+            .header,
+            .content,
+            .footer {
+                padding-left: 20px !important;
+                padding-right: 20px !important;
+            }
+
+            .stat-cell,
+            .stat-cell-right {
+                display: block !important;
+                width: 100% !important;
+                padding: 0 0 12px 0 !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+            <td class="email-wrapper" align="center">
+
+                <table
+                    role="presentation"
+                    class="email-container"
+                    width="100%"
+                    cellpadding="0"
+                    cellspacing="0"
+                    border="0"
+                >
+
+                    <!-- Header -->
+                    <tr>
+                        <td class="header">
+                            <div class="logo">
+                                Blog System
+                            </div>
+
+                            <div class="header-subtitle">
+                                Blog administration
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Main content -->
+                    <tr>
+                        <td class="content">
+                            <f:render section="Main" arguments="{_all}" />
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td class="footer">
+                            <p class="footer-text">
+                                This is an automated email from {siteName}.
+                                <br>
+                                Please do not reply to this email.
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

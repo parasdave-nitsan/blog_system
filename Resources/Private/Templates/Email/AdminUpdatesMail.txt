@@ -1,0 +1,38 @@
+Blog overview
+
+Here is the latest overview of your blog content.
+Review the numbers below to keep your content up to date.
+
+BLOG STATISTICS
+---------------
+
+Total blogs: {totalBlogs}
+Drafts: {draftBlogs}
+Published: {publishedBlogs}
+Updated recently: {recentlyUpdatedBlogs}
+
+
+<f:if condition="{draftBlogs}">
+DRAFTS NEED YOUR ATTENTION
+--------------------------
+
+You currently have {draftBlogs} blog(s) saved as draft.
+Consider reviewing and publishing them when they are ready.
+
+</f:if>
+
+<f:if condition="{recentBlogs}">
+RECENT BLOG ACTIVITY
+--------------------
+
+<f:for each="{recentBlogs}" as="blog">
+{blog.title}
+<f:if condition="{blog.status}">Status: {blog.status}</f:if>
+
+</f:for>
+</f:if>
+
+<f:if condition="{adminUrl}">
+Manage blogs:
+{adminUrl}
+</f:if>
