@@ -217,6 +217,8 @@ class BlogController extends ActionController
             }
         }
 
+        $blog->setPublishStatus('draft');
+
         $this->blogRepository->add($blog);
         $this->addFlashMessage('Blog created successfully.');
 
@@ -262,6 +264,8 @@ class BlogController extends ActionController
                 }
             }
         }
+
+        $blog->setPublishStatus('draft');
 
         $this->blogRepository->update($blog);
         $this->addFlashMessage('Blog updated successfully.');
