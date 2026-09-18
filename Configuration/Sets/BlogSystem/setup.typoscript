@@ -7,5 +7,6 @@ plugin.tx_blogsystem_blog {
 
     persistence {
         storagePid = 1
+        recursive = 99
     }
 }
