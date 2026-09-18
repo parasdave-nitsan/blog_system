@@ -82,14 +82,12 @@ class BlogRepository extends Repository
     public function findDrafts(): array
     {
         $query = $this->createQuery();
+        $query->getQuerySettings()->setIgnoreEnableFields(true); // rule out hidden/disable field filtering
+        $query->getQuerySettings()->setRespectStoragePage(false); // rule out PID filtering
 
         $query->matching(
-            $query->equals('publish_status', 'draft')
+            $query->equals('publishStatus', 'draft')
         );
-
-        $query->setOrderings([
-            'crdate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING,
-        ]);
 
         return $query->execute()->toArray();
     }

@@ -23,6 +23,7 @@ use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
 use TYPO3\CMS\Core\Resource\Security\FileNameValidator;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use Nitsan\BlogSystem\Event\CommentFilterationEvent;
+use TYPO3\CMS\Core\Resource\StorageRepository;
 
 
 class BlogController extends ActionController
@@ -33,16 +34,16 @@ class BlogController extends ActionController
         private readonly CategoryRepository $categoryRepository,
         private readonly ResourceFactory $resourceFactory,
         private readonly PersistenceManagerInterface $persistenceManager
-    ) {}
+    ) {
+    }
 
     public function listAction(
         int $currentPage = 1,
         int $category = 0,
         string $sortBy = 'publishDate',
         string $direction = 'DESC'
-    ): ResponseInterface
-    {
-        $limit = (int)($this->settings['limit'] ?? 10);
+    ): ResponseInterface {
+        $limit = (int) ($this->settings['limit'] ?? 10);
 
         if ($limit < 1) {
             $limit = 10;
@@ -164,7 +165,7 @@ class BlogController extends ActionController
         return $this->redirect('list');
     }
 
-    public function searchAction(String $search = ''): ResponseInterface
+    public function searchAction(string $search = ''): ResponseInterface
     {
         $results = $this->blogRepository->search($search);
 
@@ -173,7 +174,7 @@ class BlogController extends ActionController
             'search' => $search,
         ]);
 
-        return $this->htmlResponse(); 
+        return $this->htmlResponse();
     }
 
     #[IgnoreValidation(['argumentName' => 'blog'])]
@@ -297,7 +298,14 @@ class BlogController extends ActionController
             return null;
         }
 
-        $uploadFolder = $this->resourceFactory->retrieveFileOrFolderObject('1:/user_upload/blog/');
+        $storage = GeneralUtility::makeInstance(StorageRepository::class)->findByUid(1);
+
+        if ($storage->hasFolder('user_upload/blog/')) {
+            $uploadFolder = $storage->getFolder('user_upload/blog/');
+        } else {
+            $uploadFolder = $storage->createFolder('user_upload/blog/');
+        }
+
         $falFile = $uploadFolder->addUploadedFile($uploadedFile, DuplicationBehavior::RENAME);
 
         $falFileReference = $this->resourceFactory->createFileReferenceObject([
@@ -312,7 +320,7 @@ class BlogController extends ActionController
 
         return $fileReference;
     }
-    
+
     public function deleteAction(Blog $blog): ResponseInterface
     {
         $this->blogRepository->remove($blog);
@@ -320,6 +328,6 @@ class BlogController extends ActionController
         return $this->redirect('list');
     }
 
-    
+
 
 }

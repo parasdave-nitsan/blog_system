@@ -96,16 +96,6 @@
             .catch(error => console.error('Error loading pagination:', error));
     });
 
-    document.getElementById('blog-filter-form').addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const category = document.getElementById('blog-filter-category').value;
-        const sortBy = document.getElementById('blog-filter-sort').value;
-        const direction = document.getElementById('blog-filter-direction').value;
-
-        window.location.href = '/' + category + '/' + sortBy + '/' + direction + '/page-1';
-    });
-
 
     if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", initBlogCards);
