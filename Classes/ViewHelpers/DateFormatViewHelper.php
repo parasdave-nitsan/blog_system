@@ -14,7 +14,8 @@ final class DateFormatViewHelper extends AbstractViewHelper
             'date',
             \DateTimeInterface::class,
             'The date to format',
-            true
+            false,
+            null
         );
 
         $this->registerArgument(
@@ -24,12 +25,25 @@ final class DateFormatViewHelper extends AbstractViewHelper
             false,
             'Y-m-d H:i:s'
         );
+
+        $this->registerArgument(
+            'default',
+            'string',
+            'Value to output when date is null',
+            false,
+            ''
+        );
     }
 
     public function render(): string
     {
-        /** @var \DateTimeInterface $date */
+        /** @var \DateTimeInterface|null $date */
         $date = $this->arguments['date'];
+
+        if ($date === null) {
+            return (string)$this->arguments['default'];
+        }
+
         $format = $this->arguments['format'];
 
         return $date->format($format);

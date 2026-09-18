@@ -28,6 +28,8 @@ return [
                 author,
                 publish_date,
                 thumbnail,
+                publish_status,
+                slug
             ',
         ],
     ],
@@ -107,16 +109,38 @@ return [
         'slug' => [
             'label' => 'Slug',
             'config' => [
-                'type' => 'input',
-                'readOnly' => true,
+                'type' => 'slug',
+                'size' => 50,
+                'generatorOptions' => [
+                    'fields' => [
+                        'title',
+                    ],
+                ],
+                'fallbackCharacter' => '-',
+                'eval' => 'unique',
             ],
         ],
 
-        'publish_status'=> [
-            'label'=> 'Publish status',
-            'config'=> [
-                'type'=> 'input',
-            ]
-        ]
+
+        'publish_status' => [
+            'label' => 'Publish status',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    [
+                        'label' => 'Draft',
+                        'value' => 'draft',
+                    ],
+                    [
+                        'label' => 'Published',
+                        'value' => 'published',
+                    ],
+                ],
+                'default' => 'draft',
+                'minitems' => 1,
+                'maxitems' => 1,
+            ],
+        ],
     ],
 ];

@@ -25,33 +25,35 @@
 
             <f:flashMessages />
 
-            <form id="blog-filter-form" class="blog-filter-form">
-                <div class="blog-filter-field">
-                    <label for="blog-filter-category">Category</label>
-                    <f:form.select id="blog-filter-category" name="category" options="{categories}"
-                        optionValueField="uid" optionLabelField="name" prependOptionLabel="All categories"
-                        prependOptionValue="0" value="{selectedCategory}" class="blog-filter-select" />
-                </div>
+            <f:if condition="{blogs -> f:count()}">
+                <form id="blog-filter-form" class="blog-filter-form">
+                    <div class="blog-filter-field">
+                        <label for="blog-filter-category">Category</label>
+                        <f:form.select id="blog-filter-category" name="category" options="{categories}"
+                            optionValueField="uid" optionLabelField="name" prependOptionLabel="All categories"
+                            prependOptionValue="0" value="{selectedCategory}" class="blog-filter-select" />
+                    </div>
 
-                <div class="blog-filter-field">
-                    <label for="blog-filter-sort">Sort by</label>
-                    <f:form.select id="blog-filter-sort" name="sortBy" value="{sortBy}" class="blog-filter-select">
-                        <f:form.select.option value="publishDate">Publish date</f:form.select.option>
-                        <f:form.select.option value="views">Views</f:form.select.option>
-                    </f:form.select>
-                </div>
+                    <div class="blog-filter-field">
+                        <label for="blog-filter-sort">Sort by</label>
+                        <f:form.select id="blog-filter-sort" name="sortBy" value="{sortBy}" class="blog-filter-select">
+                            <f:form.select.option value="publishDate">Publish date</f:form.select.option>
+                            <f:form.select.option value="views">Views</f:form.select.option>
+                        </f:form.select>
+                    </div>
 
-                <div class="blog-filter-field">
-                    <label for="blog-filter-direction">Order</label>
-                    <f:form.select id="blog-filter-direction" name="direction" value="{direction}"
-                        class="blog-filter-select">
-                        <f:form.select.option value="DESC">Descending</f:form.select.option>
-                        <f:form.select.option value="ASC">Ascending</f:form.select.option>
-                    </f:form.select>
-                </div>
+                    <div class="blog-filter-field">
+                        <label for="blog-filter-direction">Order</label>
+                        <f:form.select id="blog-filter-direction" name="direction" value="{direction}"
+                            class="blog-filter-select">
+                            <f:form.select.option value="DESC">Descending</f:form.select.option>
+                            <f:form.select.option value="ASC">Ascending</f:form.select.option>
+                        </f:form.select>
+                    </div>
 
-                <f:form.submit value="Apply filters" class="blog-filter-submit" />
-            </form>
+                    <f:form.submit value="Apply filters" class="blog-filter-submit" />
+                </form>
+            </f:if>
 
             <f:if condition="{blogs -> f:count()}">
 
