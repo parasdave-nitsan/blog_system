@@ -1426,3 +1426,357 @@ REDUCED MOTION
     }
 
 }
+
+
+/* =========================================================
+   KE_SEARCH CUSTOM CSS
+   Header search + search results
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   General
+   --------------------------------------------------------- */
+
+.tx-kesearch-pi1,
+.tx-kesearch-pi1 input,
+.tx-kesearch-pi1 select,
+.tx-kesearch-pi1 button {
+    font: inherit;
+}
+
+.tx-kesearch-pi1 .clearer {
+    display: block;
+    height: 1px;
+    line-height: 1px;
+    clear: both;
+}
+
+.tx-kesearch-pi1 form {
+    margin: 0;
+}
+
+.tx-kesearch-pi1 fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+
+/* =========================================================
+   HEADER SEARCH
+   ========================================================= */
+
+.header-search .kesearchbox {
+    width: 100%;
+    margin: 0;
+}
+
+.header-search .kesearch_searchbox {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/* Search form */
+.header-search form {
+    position: relative;
+    width: 100%;
+    margin: 0;
+}
+
+/* Search input */
+.header-search #ke_search_sword {
+    width: 100%;
+    height: 44px;
+    box-sizing: border-box;
+
+    padding: 0 52px 0 16px;
+
+    border: 1px solid #d8d8d8;
+    border-radius: 24px;
+
+    background: #fff;
+    color: #222;
+
+    font-size: 15px;
+    line-height: 44px;
+
+    outline: none;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+.header-search #ke_search_sword::placeholder {
+    color: #999;
+}
+
+.header-search #ke_search_sword:hover {
+    border-color: #bbb;
+}
+
+.header-search #ke_search_sword:focus {
+    border-color: #222;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, .08);
+}
+
+
+/* ---------------------------------------------------------
+   Header search button
+   --------------------------------------------------------- */
+
+.header-search span.submitbutt {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+
+    width: 34px;
+    height: 34px;
+
+    margin: 0;
+    padding: 0;
+}
+
+.header-search span.submitbutt input {
+    width: 34px;
+    height: 34px;
+
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: #222;
+    color: #fff;
+
+    cursor: pointer;
+
+    font-size: 0;
+    line-height: 34px;
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+}
+
+.header-search span.submitbutt input:hover {
+    background: #000;
+    transform: scale(1.05);
+}
+
+/* Search icon */
+.header-search span.submitbutt input::before {
+    content: "⌕";
+}
+
+
+/* =========================================================
+   HIDE RESET BUTTON IN HEADER
+   ========================================================= */
+
+.header-search span.resetbutt {
+    display: none;
+}
+
+
+/* =========================================================
+   SEARCH RESULTS PAGE
+   ========================================================= */
+
+.search-results-page .tx-kesearch-pi1 {
+    width: 100%;
+}
+
+.search-results-page #kesearch_results {
+    width: 100%;
+    max-width: 900px;
+    margin: 30px auto;
+}
+
+
+/* ---------------------------------------------------------
+   Individual result
+   --------------------------------------------------------- */
+
+.search-results-page #kesearch_results .result-list-item {
+    clear: both;
+
+    margin: 0;
+    padding: 22px 0;
+
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.search-results-page #kesearch_results .result-list-item:first-child {
+    border-top: 1px solid #e5e5e5;
+}
+
+
+/* Result number */
+.search-results-page #kesearch_results .result-number {
+    display: none;
+}
+
+
+/* Result title */
+.search-results-page #kesearch_results .result-title {
+    margin: 0 0 8px;
+
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.search-results-page #kesearch_results .result-title a {
+    color: #222;
+    text-decoration: none;
+}
+
+.search-results-page #kesearch_results .result-title a:hover {
+    color: #0057b8;
+}
+
+
+/* Result teaser */
+.search-results-page #kesearch_results .result-teaser {
+    margin-top: 8px;
+
+    color: #666;
+
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+
+/* Highlight searched words */
+.search-results-page #kesearch_results .hit {
+    color: #c62828;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   SEARCH QUERY / INFORMATION
+   ========================================================= */
+
+.search-results-page #kesearch_query_time {
+    margin: 15px 0;
+
+    color: #888;
+
+    text-align: left;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   FILTERS
+   ========================================================= */
+
+.search-results-page #kesearch_filters {
+    margin-bottom: 25px;
+}
+
+.search-results-page #kesearch_filters select {
+    min-height: 40px;
+    padding: 8px 12px;
+
+    border: 1px solid #d5d5d5;
+    border-radius: 4px;
+
+    background: #fff;
+    color: #333;
+}
+
+.search-results-page #kesearch_filters label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   PAGEBROWSER
+   ========================================================= */
+
+.search-results-page .kesearch_pagebrowser {
+    margin: 30px 0;
+    text-align: center;
+}
+
+.search-results-page .kesearch_pagebrowser ul {
+    display: inline-flex;
+    gap: 5px;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.search-results-page .kesearch_pagebrowser ul li {
+    margin: 0;
+    list-style: none;
+}
+
+.search-results-page .kesearch_pagebrowser a,
+.search-results-page .kesearch_pagebrowser .page-link {
+    display: block;
+
+    min-width: 38px;
+    padding: 8px 12px;
+
+    border: 1px solid #ddd;
+    border-radius: 4px;
+
+    color: #333;
+    text-decoration: none;
+}
+
+.search-results-page .kesearch_pagebrowser a:hover {
+    background: #f5f5f5;
+}
+
+.search-results-page .kesearch_pagebrowser .active .page-link {
+    background: #222;
+    border-color: #222;
+    color: #fff;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+    .header-search #ke_search_sword {
+        height: 42px;
+        padding-left: 14px;
+        font-size: 14px;
+    }
+
+    .header-search span.submitbutt {
+        top: 4px;
+    }
+
+    .search-results-page #kesearch_results {
+        margin: 20px auto;
+    }
+
+    .search-results-page #kesearch_results .result-list-item {
+        padding: 18px 0;
+    }
+
+    .search-results-page #kesearch_results .result-title {
+        font-size: 18px;
+    }
+
+    .search-results-page #kesearch_results .result-teaser {
+        font-size: 14px;
+    }
+}

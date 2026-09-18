@@ -33,7 +33,7 @@ class BlogTableIndexer extends IndexerBase
         $customIndexer = [
             'Blog Table Indexer',
             self::KEY,
-            'EXT:blog_system/Resources/Public/Icons/blog-system-blog.gif',
+            'EXT:blog_system/Resources/Public/Icons/blog-system-blog.svg',
         ];
         $params['items'][] = $customIndexer;
     }
